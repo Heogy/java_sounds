@@ -1,9 +1,6 @@
 package edu.heog.sound;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,12 +34,8 @@ public class GuessTone
 			while (true)
 			{
 				int key = random.nextInt(notes.size());
-//				System.out.println(key);
 				String toGuess = new ArrayList<>(notes.keySet()).get(key);
-//				System.out.println("to guess : " + toGuess);
-				Float aFloat = notes.get(toGuess);
-//				System.out.println(aFloat);
-				GuessTone.createTone(notes.get(toGuess), 100);
+				Synth.createTone(notes.get(toGuess), 100);
 
 				System.out.print("what'toGuess this note (A4-E5) ? ");
 				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -54,7 +47,7 @@ public class GuessTone
 				}
 				else
 				{
-					System.out.println("40H pratice! every day");
+					System.out.println("Oups it was : " + toGuess);
 				}
 			}
 		} catch (LineUnavailableException | IOException lue)
@@ -63,37 +56,4 @@ public class GuessTone
 		}
 	}
 
-	/**
-	 * parameters are frequency in frequency and volume
-	 **/
-	public static void createTone(float frequency, int volume)
-			throws LineUnavailableException
-	{
-		/** Exception is thrown when line cannot be opened */
-
-		float rate = 44100;
-		byte[] buf;
-		AudioFormat audioF;
-
-		buf = new byte[1];
-		audioF = new AudioFormat(rate, 8, 1, true, false);
-		//sampleRate, sampleSizeInBits,channels,signed,bigEndian
-
-		SourceDataLine sourceDL = AudioSystem.getSourceDataLine(audioF);
-		sourceDL = AudioSystem.getSourceDataLine(audioF);
-		sourceDL.open(audioF);
-		sourceDL.start();
-
-
-		for (int i = 0; i < rate; i++)
-		{
-			double angle = (i / rate) * frequency * 2.0 * Math.PI;
-			buf[0] = (byte) (Math.sin(angle) * volume);
-			sourceDL.write(buf, 0, 1);
-		}
-
-		sourceDL.drain();
-		sourceDL.stop();
-		sourceDL.close();
-	}
 }

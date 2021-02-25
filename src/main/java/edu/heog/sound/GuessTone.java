@@ -33,7 +33,7 @@ public class GuessTone
 
 			while (true)
 			{
-				int key = random.nextInt(notes.size());
+				int key= random.nextInt(notes.size());
 				String toGuess = new ArrayList<>(notes.keySet()).get(key);
 				Synth.createTone(notes.get(toGuess), 100);
 
@@ -49,8 +49,7 @@ public class GuessTone
 				{
 					System.out.println("Oups it was : " + toGuess);
 				}
-			}
-		} catch (LineUnavailableException | IOException lue)
+			}} catch (LineUnavailableException | IOException lue)
 		{
 			System.out.println(lue);
 		}
